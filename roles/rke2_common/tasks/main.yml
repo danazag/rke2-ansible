@@ -51,6 +51,11 @@
     state: stopped
     enabled: no
   when: ansible_facts.services["firewalld.service"] is defined
+  register: service_command_output
+  failed_when: >
+    service_command_output is failed
+    and 'unrecognized service' not in service_command_output.msg
+    and 'Could not find the requested service' not in service_command_output
 
 - include: network_manager_fix.yaml
 
